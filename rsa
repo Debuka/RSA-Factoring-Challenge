@@ -1,0 +1,44 @@
+#!/usr/bin/python3
+import sys
+import time
+from sympy import isprime
+
+# Function to factorize a number into a product of two prime numbers
+def factorize(n):
+    """Function that factorizes a number into a product of two prime numbers."""
+    # Loop from 2 to square root of the number
+    for i in range(2, int(n**0.5)+1):
+        if n % i == 0 and isprime(i) and isprime(n // i):
+            return (i, n // i)
+    # If no factors found, return None
+    return None
+
+# Main function
+if __name__ == "__main__":
+    # Check if the correct number of arguments are provided
+    if len(sys.argv) != 2:
+        print("usage: factors <file>")
+        exit()
+
+    # Get the input file name from the arguments
+    input_file = sys.argv[1]
+    
+    # Try to open the file and read the number
+    try:
+        with open(input_file, 'r') as f:
+            n = int(f.readline().strip())
+            
+            start_t = time.time()
+            
+            factors = factorize(n)
+            
+            if factors:
+                print(f"{n}={factors[0]}*{factors[1]}")
+            
+            if time.time() - start_t > 5:
+                print("Time limit exceeded")
+                exit()
+                
+    except FileNotFoundError:
+        print(f"No such file or directory: '{input_file}'")
+

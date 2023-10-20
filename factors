@@ -1,0 +1,53 @@
+#!/usr/bin/python3
+import sys
+import time
+
+''' Function to factorize a number into a product of two smaller numbers'''
+def factorize(dgt):
+    """Function that factorizes a number into a product of two smaller numbers."""
+    # Loop from 2 to square root of the number
+    for i in range(2, int(dgt**0.5)+1):
+        # If the number is divisible by i, return i and the quotient
+        if dgt % i == 0:
+            return (i, dgt//i)
+    # If no factors found, return None
+    return None
+
+# Main function
+if __name__ == "__main__":
+    # Check if the correct number of arguments are provided
+    if len(sys.argv) != 2:
+        print("usage: factors <file>")
+        exit()
+
+    # Get the input file name from the arguments
+    input_file = sys.argv[1]
+    
+    # Try to open the file and read the numbers
+    try:
+        with open(input_file, 'r') as f:
+            lines = f.readlines()
+    except FileNotFoundError:
+        print("File not found")
+        exit()
+
+    # Start the timer
+    start_t = time.time()
+
+    # Loop over each line in the file
+    for line in lines:
+        # Convert the line to an integer
+        dgt = int(line.strip())
+        
+        # Factorize the number
+        factors = factorize(dgt)
+        
+        # If factors are found, print them
+        if factors:
+            print(f"{dgt}={factors[0]}*{factors[1]}")
+        
+        # If time limit exceeded, print message and exit
+        if time.time() - start_t > 5:
+            print("Time limit exceeded")
+            exit()
+
